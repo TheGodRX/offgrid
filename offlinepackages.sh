@@ -8,20 +8,20 @@ PACKAGE_CACHE="$HOME/package_cache"
 ARCH_REPO="$HOME/archbang_package_cache"
 mkdir -p "$BASE_DIR" "$PIP_CACHE" "$PACKAGE_CACHE" "$ARCH_REPO"
 
-# Essential system tools
+# Essential system tools (explicitly choose netcat version, and fix `fastboot` and `espeak`)
 SYSTEM_PACKAGES=(
     "base-devel" "linux-headers" "git" "wget" "curl" "rsync" "vim" "nano" "pluma" "tmux"
     "htop" "ufw" "iptables" "wireguard-tools" "openvpn" "dnsmasq" "nginx" "apache" "php"
     "mariadb" "sqlite" "dhcp" "hostapd" "tor" "i2pd" "mpv" "mplayer" "vlc" "ffmpeg"
     "yt-dlp" "python" "python-pip" "python-requests" "python-beautifulsoup4" "python-lxml"
-    "adb" "fastboot" "nmap" "aircrack-ng" "john" "hydra" "hashcat" "metasploit" "radare2"
+    "android-tools" "nmap" "aircrack-ng" "john" "hydra" "hashcat" "metasploit" "radare2"
     "binwalk" "strace" "lsof" "tcpdump" "wireshark-cli" "iperf3" "dnsutils" "whois"
-    "netcat" "socat" "proxychains-ng" "minicom" "mosh" "screen" "autossh" "ansible" "rclone"
-    "lolcat" "espeak"
+    "gnu-netcat" "socat" "proxychains-ng" "minicom" "mosh" "screen" "autossh" "ansible" "rclone"
+    "espeak-ng"  # `espeak-ng` instead of `espeak`
 )
 
 # Install system packages and cache updates
-echo "Updating system and installing packages..."
+echo "Updating system and installing essential system packages..."
 sudo pacman -Syu --noconfirm
 sudo pacman -S --noconfirm "${SYSTEM_PACKAGES[@]}"
 sudo pacman -Syw --cachedir "$PACKAGE_CACHE"
@@ -76,10 +76,10 @@ fi
 echo "Refreshing pacman database..."
 sudo pacman -Sy
 
-# Cloning GitHub resources
-echo "Cloning survival resources from GitHub..."
-git clone --depth=1 "https://github.com/TheGodRX/offgrid.git" "$BASE_DIR/HOME"
+# Ensure git is installed and cloning the repository
+echo "Ensure Git is installed and cloning the survival resources from GitHub..."
+git clone --depth=1 "https://github.com/TheGodRX/offgrid.git" "$BASE_DIR/HOME" || { echo "Git clone failed!"; exit 1; }
 
 # Finished
 echo "All resources downloaded and system ready for offline use!"
-echo "Proceed to python3 offgrid1.0.py to complete resource grabbing."
+echo "Proceed to run python3 offgrid1.0.py to complete resource grabbing."
