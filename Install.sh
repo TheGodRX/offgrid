@@ -59,9 +59,11 @@ echo "LANG=en_US.UTF-8" > /etc/locale.conf
 # Set the hostname
 echo "archbang" > /etc/hostname
 
-# Install and configure GRUB
-pacman -S grub efibootmgr
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+# Install and configure GRUB (non-interactive)
+pacman -S grub efibootmgr --noconfirm
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --no-nvram
+
+# Generate GRUB configuration (non-interactive)
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Set up root password
